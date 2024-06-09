@@ -12,9 +12,6 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
       - uses: pnpm/action-setup@v4
         name: Install pnpm
@@ -46,5 +43,5 @@ jobs:
       - name: Publish to npm
         run: pnpm release
         env:
-          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
