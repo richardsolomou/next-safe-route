@@ -92,7 +92,7 @@
       "before:init": [
         "git pull",
         "pnpm lint",
-        "pnpm format"
+        "pnpm build"
       ]
     }
   }
