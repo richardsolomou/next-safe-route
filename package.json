@@ -1,0 +1,77 @@
+{
+  "name": "next-safe-route",
+  "version": "0.0.1",
+  "description": "A safer way to define route handlers in Next.js",
+  "keywords": [
+    "next",
+    "nextjs",
+    "next route",
+    "next safe route",
+    "nextjs safe",
+    "nextjs safe route",
+    "next api route",
+    "nextjs api route"
+  ],
+  "homepage": "https://github.com/richardsolomou/next-safe-route#readme",
+  "bugs": {
+    "url": "https://github.com/richardsolomou/next-safe-route/issues",
+    "email": "richard@solomou.dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/richardsolomou/next-safe-route"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Richard Solomou",
+    "email": "richard@solomou.dev",
+    "url": "https://solomou.dev"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "pnpm build --watch",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "lint": "tsc --noEmit && eslint .",
+    "lint-staged": "lint-staged",
+    "prepare": "husky",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:watch": "vitest"
+  },
+  "lint-staged": {
+    "**/*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  },
+  "dependencies": {
+    "@typeschema/main": "^0.13.9"
+  },
+  "devDependencies": {
+    "@swc/core": "^1.5.25",
+    "@tronite/style-guide": "^0.0.13",
+    "@types/node": "^20.14.2",
+    "@typeschema/yup": "^0.13.3",
+    "@typeschema/zod": "^0.13.3",
+    "@vitest/coverage-v8": "^1.6.0",
+    "eslint": "^8.57.0",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.5",
+    "prettier": "^3.3.1",
+    "tsup": "^8.1.0",
+    "typescript": "^5.4.5",
+    "vitest": "^1.6.0",
+    "yup": "^1.4.0",
+    "zod": "^3.23.8"
+  },
+  "packageManager": "pnpm@9.1.2",
+  "publishConfig": {
+    "access": "public"
+  }
+}
