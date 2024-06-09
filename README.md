@@ -1,8 +1,6 @@
-<p align="center">
-  <h1 align="center">🧷 next-safe-route</h1>
-</p>
+# 🧷 next-safe-route</h1>
 
-<p align="center">
+<p>
   <img src="https://img.shields.io/npm/v/next-safe-route" />
   <img src="https://img.shields.io/github/actions/workflow/status/richardsolomou/next-safe-route/release.yaml" />
   <img src="https://img.shields.io/npm/l/next-safe-route" />
