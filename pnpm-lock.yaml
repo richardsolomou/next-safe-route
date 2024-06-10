@@ -10,7 +10,10 @@ importers:
     dependencies:
       '@typeschema/main':
         specifier: ^0.13.9
-        version: 0.13.9(@typeschema/yup@0.13.3(yup@1.4.0))(@typeschema/zod@0.13.3(zod@3.23.8))
+        version: 0.13.9(@typeschema/zod@0.13.3(zod@3.23.8))
+      '@typeschema/zod':
+        specifier: ^0.13.3
+        version: 0.13.3(zod@3.23.8)
     devDependencies:
       '@swc/core':
         specifier: ^1.5.25
@@ -21,12 +24,6 @@ importers:
       '@types/node':
         specifier: ^20.14.2
         version: 20.14.2
-      '@typeschema/yup':
-        specifier: ^0.13.3
-        version: 0.13.3(yup@1.4.0)
-      '@typeschema/zod':
-        specifier: ^0.13.3
-        version: 0.13.3(zod@3.23.8)
       '@vitest/coverage-v8':
         specifier: ^1.6.0
         version: 1.6.0(vitest@1.6.0(@types/node@20.14.2))
@@ -54,9 +51,6 @@ importers:
       vitest:
         specifier: ^1.6.0
         version: 1.6.0(@types/node@20.14.2)
-      yup:
-        specifier: ^1.4.0
-        version: 1.4.0
       zod:
         specifier: ^3.23.8
         version: 3.23.8
@@ -904,17 +898,6 @@ packages:
       '@typeschema/zod':
         optional: true
 
-  '@typeschema/yup@0.13.3':
-    resolution: {integrity: sha512-Z+MtVn/ypL3CISknBuAmdt2xvMM0Q/ZmfjV+2xk4O26dL+Sx3fu9h1X3ANX6n/3uTfS1C4RbT4HzlK9DX4Tdxg==}
-    peerDependencies:
-      '@sodaru/yup-to-json-schema': ^2.0.1
-      yup: ^1.3.3
-    peerDependenciesMeta:
-      '@sodaru/yup-to-json-schema':
-        optional: true
-      yup:
-        optional: true
-
   '@typeschema/zod@0.13.3':
     resolution: {integrity: sha512-p5Hs22WIKkM/vZTAvw5QOLSA0EJ6QBUsQMGUrXlYnTAE2LSR/F5MLsDUb18O6S5VxGjrzU7x3VIznD5qOafJRw==}
     peerDependencies:
@@ -1219,8 +1202,8 @@ packages:
     resolution: {integrity: sha512-xlx1yCK2Oc1APsPXDL2LdlNP6+uu8OCDdhOBSVT279M/S+y75O30C2VuD8T2ogdePBBl7PfPF4504tnLgX3zfw==}
     engines: {node: '>=14.16'}
 
-  caniuse-lite@1.0.30001629:
-    resolution: {integrity: sha512-c3dl911slnQhmxUIT4HhYzT7wnBK/XYpGnYLOj4nJBaRiw52Ibe7YxlDaAeRECvA786zCuExhxIUJ2K7nHMrBw==}
+  caniuse-lite@1.0.30001632:
+    resolution: {integrity: sha512-udx3o7yHJfUxMLkGohMlVHCvFvWmirKh9JAH/d7WOLPetlH+LTL5cocMZ0t7oZx/mdlOWXti97xLZWc8uURRHg==}
 
   chai@4.4.1:
     resolution: {integrity: sha512-13sOfMv2+DWduEU+/xbun3LScLoqN17nBeTLUsmDfKdoiC1fr0n9PU4guu4AhRcOVFk/sW8LyZWHuhWtQZiF+g==}
@@ -2815,9 +2798,6 @@ packages:
   prop-types@15.8.1:
     resolution: {integrity: sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==}
 
-  property-expr@2.0.6:
-    resolution: {integrity: sha512-SVtmxhRE/CGkn3eZY1T6pC8Nln6Fr/lu1mKSgRud0eC73whjGfoAogbn78LkD8aFL0zz3bAFerKSnOl7NlErBA==}
-
   proto-list@1.2.4:
     resolution: {integrity: sha512-vtK/94akxsTMhe0/cbfpR+syPuszcuwhqVjJq26CuNDgFGj682oRBXOP5MJpv2r7JtE8MsiepGIqvvOTBwn2vA==}
 
@@ -3206,9 +3186,6 @@ packages:
   thenify@3.3.1:
     resolution: {integrity: sha512-RVZSIV5IG10Hk3enotrhvz0T9em6cyHBLkH/YAZuKqd8hRkKhSfCGIcP2KUY0EPxndzANBmNllzWPwak+bheSw==}
 
-  tiny-case@1.0.3:
-    resolution: {integrity: sha512-Eet/eeMhkO6TX8mnUteS9zgPbUMQa4I6Kkp5ORiBD5476/m+PIRiumP5tmh5ioJpH7k51Kehawy2UDfsnxxY8Q==}
-
   tinybench@2.8.0:
     resolution: {integrity: sha512-1/eK7zUnIklz4JUUlL+658n58XO2hHLQfSk1Zf2LKieUjxidN16eKFEoDEfjHc3ohofSSqK3X5yO6VGb6iW8Lw==}
 
@@ -3231,9 +3208,6 @@ packages:
   to-regex-range@5.0.1:
     resolution: {integrity: sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==}
     engines: {node: '>=8.0'}
-
-  toposort@2.0.2:
-    resolution: {integrity: sha512-0a5EOkAUp8D4moMi2W8ZF8jcga7BgZd91O/yabJCFY8az+XSzeGyTKs0Aoo897iV1Nj6guFq8orWDS96z91oGg==}
 
   tr46@1.0.1:
     resolution: {integrity: sha512-dTpowEjclQ7Kgx5SdBkqRzVhERQXov8/l9Ft9dVM9fmg0W0KQSVaXX9T4i6twCPNtYiZM53lpSSUAwJbFPOHxA==}
@@ -3524,9 +3498,6 @@ packages:
   yocto-queue@1.0.0:
     resolution: {integrity: sha512-9bnSc/HEW2uRy67wc+T8UwauLuPJVn28jb+GtJY16iiKWyvmYJRXVT4UamsAEGQfPohgr2q4Tq0sQbQlxTfi1g==}
     engines: {node: '>=12.20'}
-
-  yup@1.4.0:
-    resolution: {integrity: sha512-wPbgkJRCqIf+OHyiTBQoJiP5PFuAXaWiJK6AmYkzQAh5/c2K9hzSApBZG5wV9KoKSePF7sAxmNSvh/13YHkFDg==}
 
   zod@3.23.8:
     resolution: {integrity: sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==}
@@ -4213,20 +4184,11 @@ snapshots:
 
   '@typeschema/core@0.13.2': {}
 
-  '@typeschema/main@0.13.9(@typeschema/yup@0.13.3(yup@1.4.0))(@typeschema/zod@0.13.3(zod@3.23.8))':
+  '@typeschema/main@0.13.9(@typeschema/zod@0.13.3(zod@3.23.8))':
     dependencies:
       '@typeschema/core': 0.13.2
     optionalDependencies:
-      '@typeschema/yup': 0.13.3(yup@1.4.0)
       '@typeschema/zod': 0.13.3(zod@3.23.8)
-    transitivePeerDependencies:
-      - '@types/json-schema'
-
-  '@typeschema/yup@0.13.3(yup@1.4.0)':
-    dependencies:
-      '@typeschema/core': 0.13.2
-    optionalDependencies:
-      yup: 1.4.0
     transitivePeerDependencies:
       - '@types/json-schema'
 
@@ -4576,7 +4538,7 @@ snapshots:
 
   browserslist@4.23.1:
     dependencies:
-      caniuse-lite: 1.0.30001629
+      caniuse-lite: 1.0.30001632
       electron-to-chromium: 1.4.796
       node-releases: 2.0.14
       update-browserslist-db: 1.0.16(browserslist@4.23.1)
@@ -4621,7 +4583,7 @@ snapshots:
 
   camelcase@7.0.1: {}
 
-  caniuse-lite@1.0.30001629: {}
+  caniuse-lite@1.0.30001632: {}
 
   chai@4.4.1:
     dependencies:
@@ -6369,8 +6331,6 @@ snapshots:
       object-assign: 4.1.1
       react-is: 16.13.1
 
-  property-expr@2.0.6: {}
-
   proto-list@1.2.4: {}
 
   protocols@2.0.1: {}
@@ -6829,8 +6789,6 @@ snapshots:
     dependencies:
       any-promise: 1.3.0
 
-  tiny-case@1.0.3: {}
-
   tinybench@2.8.0: {}
 
   tinypool@0.8.4: {}
@@ -6846,8 +6804,6 @@ snapshots:
   to-regex-range@5.0.1:
     dependencies:
       is-number: 7.0.0
-
-  toposort@2.0.2: {}
 
   tr46@1.0.1:
     dependencies:
@@ -7172,12 +7128,5 @@ snapshots:
   yocto-queue@0.1.0: {}
 
   yocto-queue@1.0.0: {}
-
-  yup@1.4.0:
-    dependencies:
-      property-expr: 2.0.6
-      tiny-case: 1.0.3
-      toposort: 2.0.2
-      type-fest: 2.19.0
 
   zod@3.23.8: {}

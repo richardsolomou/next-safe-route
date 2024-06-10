@@ -52,14 +52,13 @@
     ]
   },
   "dependencies": {
-    "@typeschema/main": "^0.13.9"
+    "@typeschema/main": "^0.13.9",
+    "@typeschema/zod": "^0.13.3"
   },
   "devDependencies": {
     "@swc/core": "^1.5.25",
     "@tronite/style-guide": "^0.0.13",
     "@types/node": "^20.14.2",
-    "@typeschema/yup": "^0.13.3",
-    "@typeschema/zod": "^0.13.3",
     "@vitest/coverage-v8": "^1.6.0",
     "eslint": "^8.57.0",
     "husky": "^9.0.11",
@@ -69,7 +68,6 @@
     "tsup": "^8.1.0",
     "typescript": "^5.4.5",
     "vitest": "^1.6.0",
-    "yup": "^1.4.0",
     "zod": "^3.23.8"
   },
   "packageManager": "pnpm@9.1.2",

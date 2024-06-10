@@ -1,8 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import * as yup from 'yup';
 import { z } from 'zod';
 
-import { HandlerFunction, createSafeRoute } from '.';
+import { createSafeRoute } from '.';
 
 const paramsSchema = z.object({
   id: z.string().uuid(),
@@ -12,18 +11,18 @@ const querySchema = z.object({
   search: z.string().min(1),
 });
 
-const bodySchema = yup.object().shape({
-  field: yup.string().required(),
+const bodySchema = z.object({
+  field: z.string(),
 });
 
 describe('params validation', () => {
-  const getHandler: HandlerFunction<{ id: string }, unknown, unknown> = async (request, context) => {
-    const { id } = context.params;
-    return Response.json({ id }, { status: 200 });
-  };
-
   it('should validate and handle valid params', async () => {
-    const GET = createSafeRoute().params(paramsSchema).handler(getHandler);
+    const GET = createSafeRoute()
+      .params(paramsSchema)
+      .handler((request, context) => {
+        const { id } = context.params;
+        return Response.json({ id }, { status: 200 });
+      });
 
     const request = new Request('http://localhost/');
     const response = await GET(request, { params: { id: '550e8400-e29b-41d4-a716-446655440000' } });
@@ -34,7 +33,12 @@ describe('params validation', () => {
   });
 
   it('should return an error for invalid params', async () => {
-    const GET = createSafeRoute().params(paramsSchema).handler(getHandler);
+    const GET = createSafeRoute()
+      .params(paramsSchema)
+      .handler((request, context) => {
+        const { id } = context.params;
+        return Response.json({ id }, { status: 200 });
+      });
 
     const request = new Request('http://localhost/');
     const response = await GET(request, { params: { id: 'invalid-uuid' } });
@@ -46,13 +50,13 @@ describe('params validation', () => {
 });
 
 describe('query validation', () => {
-  const getHandler: HandlerFunction<unknown, { search?: string }, unknown> = async (request, context) => {
-    const { search } = context.query;
-    return Response.json({ search }, { status: 200 });
-  };
-
   it('should validate and handle valid query', async () => {
-    const GET = createSafeRoute().query(querySchema).handler(getHandler);
+    const GET = createSafeRoute()
+      .query(querySchema)
+      .handler((request, context) => {
+        const search = context.query.search;
+        return Response.json({ search }, { status: 200 });
+      });
 
     const request = new Request('http://localhost/?search=test');
     const response = await GET(request);
@@ -63,7 +67,12 @@ describe('query validation', () => {
   });
 
   it('should return an error for invalid query', async () => {
-    const GET = createSafeRoute().query(querySchema).handler(getHandler);
+    const GET = createSafeRoute()
+      .query(querySchema)
+      .handler((request, context) => {
+        const search = context.query.search;
+        return Response.json({ search }, { status: 200 });
+      });
 
     const request = new Request('http://localhost/?search=');
     const response = await GET(request);
@@ -75,13 +84,13 @@ describe('query validation', () => {
 });
 
 describe('body validation', () => {
-  const getHandler: HandlerFunction<unknown, unknown, { field: string }> = async (request, context) => {
-    const field = context.body.field;
-    return Response.json({ field }, { status: 200 });
-  };
-
   it('should validate and handle valid body', async () => {
-    const POST = createSafeRoute().body(bodySchema).handler(getHandler);
+    const POST = createSafeRoute()
+      .body(bodySchema)
+      .handler((request, context) => {
+        const field = context.body.field;
+        return Response.json({ field }, { status: 200 });
+      });
 
     const request = new Request('http://localhost/', {
       method: 'POST',
@@ -95,7 +104,12 @@ describe('body validation', () => {
   });
 
   it('should return an error for invalid body', async () => {
-    const POST = createSafeRoute().body(bodySchema).handler(getHandler);
+    const POST = createSafeRoute()
+      .body(bodySchema)
+      .handler((request, context) => {
+        const field = context.body.field;
+        return Response.json({ field }, { status: 200 });
+      });
 
     const request = new Request('http://localhost/', {
       method: 'POST',
@@ -110,19 +124,18 @@ describe('body validation', () => {
 });
 
 describe('combined validation', () => {
-  const getHandler: HandlerFunction<{ id: string }, { search?: string }, { field: string }> = async (
-    request,
-    context,
-  ) => {
-    const { id } = context.params;
-    const { search } = context.query;
-    const { field } = context.body;
-
-    return Response.json({ id, search, field }, { status: 200 });
-  };
-
   it('should validate and handle valid request with params, query, and body', async () => {
-    const POST = createSafeRoute().params(paramsSchema).query(querySchema).body(bodySchema).handler(getHandler);
+    const POST = createSafeRoute()
+      .params(paramsSchema)
+      .query(querySchema)
+      .body(bodySchema)
+      .handler((request, context) => {
+        const { id } = context.params;
+        const { search } = context.query;
+        const { field } = context.body;
+
+        return Response.json({ id, search, field }, { status: 200 });
+      });
 
     const request = new Request('http://localhost/?search=test', {
       method: 'POST',
@@ -141,7 +154,17 @@ describe('combined validation', () => {
   });
 
   it('should return an error for invalid params in combined validation', async () => {
-    const POST = createSafeRoute().params(paramsSchema).query(querySchema).body(bodySchema).handler(getHandler);
+    const POST = createSafeRoute()
+      .params(paramsSchema)
+      .query(querySchema)
+      .body(bodySchema)
+      .handler((request, context) => {
+        const { id } = context.params;
+        const { search } = context.query;
+        const { field } = context.body;
+
+        return Response.json({ id, search, field }, { status: 200 });
+      });
 
     const request = new Request('http://localhost/?search=test', {
       method: 'POST',
@@ -156,7 +179,17 @@ describe('combined validation', () => {
   });
 
   it('should return an error for invalid query in combined validation', async () => {
-    const POST = createSafeRoute().params(paramsSchema).query(querySchema).body(bodySchema).handler(getHandler);
+    const POST = createSafeRoute()
+      .params(paramsSchema)
+      .query(querySchema)
+      .body(bodySchema)
+      .handler((request, context) => {
+        const { id } = context.params;
+        const { search } = context.query;
+        const { field } = context.body;
+
+        return Response.json({ id, search, field }, { status: 200 });
+      });
 
     const request = new Request('http://localhost/?search=', {
       method: 'POST',
@@ -171,7 +204,17 @@ describe('combined validation', () => {
   });
 
   it('should return an error for invalid body in combined validation', async () => {
-    const POST = createSafeRoute().params(paramsSchema).query(querySchema).body(bodySchema).handler(getHandler);
+    const POST = createSafeRoute()
+      .params(paramsSchema)
+      .query(querySchema)
+      .body(bodySchema)
+      .handler((request, context) => {
+        const { id } = context.params;
+        const { search } = context.query;
+        const { field } = context.body;
+
+        return Response.json({ id, search, field }, { status: 200 });
+      });
 
     const request = new Request('http://localhost/?search=test', {
       method: 'POST',
