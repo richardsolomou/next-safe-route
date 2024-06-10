@@ -8,13 +8,21 @@
 
 `next-safe-route` is a utility library for Next.js that provides type-safety and schema validation for [Route Handlers](https://nextjs.org/docs/app/building-your-application/routing/route-handlers)/API Routes.
 
+## Features
+
+- **✅ Schema Validation:** Automatically validate request parameters, query strings, and body content with built-in error handling.
+- **🧷 Type-Safe:** Work with full TypeScript type safety for parameters, query strings, and body content.
+- **😌 Easy to Use:** Simple and intuitive API that makes defining route handlers a breeze.
+- **🔗 Extensible:** Compatible with any validation library supported by [TypeSchema](https://typeschema.com).
+- **🧪 Fully Tested:** Extensive test suite to ensure everything works reliably.
+
 ## Installation
 
 ```sh
 npm install next-safe-route
 ```
 
-You will also need to install a validation library, such as `zod`, but anything supported by [TypeSchema](https://typeschema.com) also works.
+The library natively works with [zod](https://zod.dev) for schema validation, but you can use any other validation library that is supported by [TypeSchema](https://typeschema.com), as long as you install its respective adapter.
 
 ## Usage
 
@@ -48,11 +56,12 @@ export const GET = createSafeRoute()
   });
 ```
 
-To define a route handler in Next.js, import and use the `createSafeRoute` function to create it.
+To define a route handler in Next.js:
 
-You can then chain the `params`, `query`, and `body` methods to define the validation schema for the request parameters, query strings, and request body, respectively. Finally, use the `handler` method to define the route handler function.
-
-Your new handler will now automatically validate the request parameters, query strings, and request body, and provide type-safe access to them in the handler function.
+1. Import `createSafeRoute` and your validation library (e.g., `zod`).
+2. Define validation schemas for params, query, and body as needed.
+3. Use `createSafeRoute()` to create a route handler, chaining `params`, `query`, and `body` methods.
+4. Implement your handler function, accessing validated and type-safe params, query, and body through `context`.
 
 ## Tests
 
