@@ -1,6 +1,6 @@
 {
   "name": "next-safe-route",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "A safer way to define route handlers in Next.js",
   "keywords": [
     "next",
