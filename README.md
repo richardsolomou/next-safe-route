@@ -1,15 +1,9 @@
 <h1 align="center">next-safe-route</h1>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/next-safe-route">
-    <img src="https://img.shields.io/npm/v/next-safe-route?style=for-the-badge&logo=npm" />
-  </a>
-  <a href="https://github.com/richardsolomou/next-safe-route/actions/workflows/test.yaml">
-    <img src="https://img.shields.io/github/actions/workflow/status/richardsolomou/next-safe-route/test.yaml?style=for-the-badge&logo=vitest" />
-  </a>
-  <a href="https://github.com/richardsolomou/next-safe-route/blob/main/LICENSE">
-    <img src="https://img.shields.io/npm/l/next-safe-route?style=for-the-badge" />
-  </a>
+  <a href="https://www.npmjs.com/package/next-safe-route"><img src="https://img.shields.io/npm/v/next-safe-route?style=for-the-badge&logo=npm" /></a>
+  <a href="https://github.com/richardsolomou/next-safe-route/actions/workflows/test.yaml"><img src="https://img.shields.io/github/actions/workflow/status/richardsolomou/next-safe-route/test.yaml?style=for-the-badge&logo=vitest" /></a>
+  <a href="https://github.com/richardsolomou/next-safe-route/blob/main/LICENSE"><img src="https://img.shields.io/npm/l/next-safe-route?style=for-the-badge" /></a>
 </p>
 
 `next-safe-route` is a utility library for Next.js that provides type-safety and schema validation for [Route Handlers](https://nextjs.org/docs/app/building-your-application/routing/route-handlers)/API Routes.

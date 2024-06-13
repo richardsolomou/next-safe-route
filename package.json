@@ -56,14 +56,14 @@
     "@typeschema/zod": "^0.13.3"
   },
   "devDependencies": {
-    "@swc/core": "^1.5.25",
+    "@swc/core": "^1.5.29",
     "@tronite/style-guide": "^0.0.13",
     "@types/node": "^20.14.2",
     "@vitest/coverage-v8": "^1.6.0",
     "eslint": "^8.57.0",
     "husky": "^9.0.11",
-    "lint-staged": "^15.2.5",
-    "prettier": "^3.3.1",
+    "lint-staged": "^15.2.7",
+    "prettier": "^3.3.2",
     "release-it": "^17.3.0",
     "tsup": "^8.1.0",
     "typescript": "^5.4.5",
