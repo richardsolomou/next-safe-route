@@ -227,4 +227,93 @@ describe('combined validation', () => {
     expect(response.status).toBe(400);
     expect(data.message).toBe('Invalid body');
   });
+
+  it('should execute middleware and add context properties', async () => {
+    const middleware = async () => {
+      return { user: { id: 'user-123', role: 'admin' } };
+    };
+
+    const GET = createSafeRoute()
+      .use(middleware)
+      .params(paramsSchema)
+      .handler((request, context) => {
+        const { id } = context.params;
+        const { user } = context.data;
+
+        return Response.json({ id, user }, { status: 200 });
+      });
+
+    const request = new Request('http://localhost/');
+    const response = await GET(request, { params: { id: '550e8400-e29b-41d4-a716-446655440000' } });
+    const data = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(data).toEqual({
+      id: '550e8400-e29b-41d4-a716-446655440000',
+      user: { id: 'user-123', role: 'admin' },
+    });
+  });
+
+  it('should execute multiple middlewares and merge context properties', async () => {
+    const middleware1 = async () => {
+      return { user: { id: 'user-123' } };
+    };
+
+    const middleware2 = async () => {
+      return { permissions: ['read', 'write'] };
+    };
+
+    const GET = createSafeRoute()
+      .use(middleware1)
+      .use(middleware2)
+      .params(paramsSchema)
+      .handler((request, context) => {
+        const { id } = context.params;
+        const { user, permissions } = context.data;
+
+        return Response.json({ id, user, permissions }, { status: 200 });
+      });
+
+    const request = new Request('http://localhost/');
+    const response = await GET(request, { params: { id: '550e8400-e29b-41d4-a716-446655440000' } });
+    const data = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(data).toEqual({
+      id: '550e8400-e29b-41d4-a716-446655440000',
+      user: { id: 'user-123' },
+      permissions: ['read', 'write'],
+    });
+  });
+
+  it('should handle server errors using handleServerError method', async () => {
+    class CustomError extends Error {
+      constructor(message: string) {
+        super(message);
+        this.name = 'CustomError';
+      }
+    }
+    const handleServerError = (error: Error) => {
+      if (error instanceof CustomError) {
+        return new Response(JSON.stringify({ message: error.name, details: error.message }), { status: 400 });
+      }
+
+      return new Response(JSON.stringify({ message: 'Something went wrong' }), { status: 400 });
+    };
+
+    const GET = createSafeRoute({
+      handleServerError,
+    })
+      .params(paramsSchema)
+      .handler(() => {
+        throw new CustomError('Test error');
+      });
+
+    const request = new Request('http://localhost/');
+    const response = await GET(request, { params: { id: '550e8400-e29b-41d4-a716-446655440000' } });
+    const data = await response.json();
+
+    expect(response.status).toBe(400);
+    expect(data).toEqual({ message: 'CustomError', details: 'Test error' });
+  });
 });
