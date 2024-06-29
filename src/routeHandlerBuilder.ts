@@ -41,8 +41,8 @@ export class RouteHandlerBuilder<
    */
   params<T extends Schema>(schema: T): RouteHandlerBuilder<T, TQuery, TBody> {
     return new RouteHandlerBuilder<T, TQuery, TBody, TContext>({
+      ...this,
       config: { ...this.config, paramsSchema: schema },
-      middlewares: this.middlewares,
     });
   }
 
@@ -53,8 +53,8 @@ export class RouteHandlerBuilder<
    */
   query<T extends Schema>(schema: T): RouteHandlerBuilder<TParams, T, TBody> {
     return new RouteHandlerBuilder<TParams, T, TBody, TContext>({
+      ...this,
       config: { ...this.config, querySchema: schema },
-      middlewares: this.middlewares,
     });
   }
 
@@ -65,8 +65,8 @@ export class RouteHandlerBuilder<
    */
   body<T extends Schema>(schema: T): RouteHandlerBuilder<TParams, TQuery, T> {
     return new RouteHandlerBuilder<TParams, TQuery, T, TContext>({
+      ...this,
       config: { ...this.config, bodySchema: schema },
-      middlewares: this.middlewares,
     });
   }
 
@@ -79,7 +79,7 @@ export class RouteHandlerBuilder<
     middleware: Middleware<T>,
   ): RouteHandlerBuilder<TParams, TQuery, TBody, TContext & T> {
     return new RouteHandlerBuilder<TParams, TQuery, TBody, TContext & T>({
-      config: this.config,
+      ...this,
       middlewares: [...this.middlewares, middleware],
     });
   }
@@ -129,12 +129,13 @@ export class RouteHandlerBuilder<
         }
 
         // Call the handler function with the validated params, query, and body
-        return await handler(request, {
+        const result = await handler(request, {
           params: params as Infer<TParams>,
           query: query as Infer<TQuery>,
           body: body as Infer<TBody>,
           data: middlewareContext,
         });
+        return result;
       } catch (error) {
         if (this.handleServerError) {
           return this.handleServerError(error as Error);
