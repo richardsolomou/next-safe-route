@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Schema } from '@typeschema/main';
 
-export type HandlerFunction<TParams, TQuery, TBody> = (
+export type HandlerFunction<TParams, TQuery, TBody, TContext> = (
   request: Request,
-  context: { params: TParams; query: TQuery; body: TBody },
+  context: { params: TParams; query: TQuery; body: TBody; data: TContext },
 ) => any;
 
 export interface RouteHandlerBuilderConfig {
@@ -13,3 +13,5 @@ export interface RouteHandlerBuilderConfig {
 }
 
 export type OriginalRouteHandler = (request: Request, context?: { params: Record<string, unknown> }) => any;
+
+export type HandlerServerErrorFn = (error: Error) => Response;
