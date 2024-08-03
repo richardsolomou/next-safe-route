@@ -39,7 +39,7 @@ export class RouteHandlerBuilder<
    * @param schema - The schema for the params
    * @returns A new instance of the RouteHandlerBuilder
    */
-  params<T extends Schema>(schema: T): RouteHandlerBuilder<T, TQuery, TBody> {
+  params<T extends Schema>(schema: T): RouteHandlerBuilder<T, TQuery, TBody, TContext> {
     return new RouteHandlerBuilder<T, TQuery, TBody, TContext>({
       ...this,
       config: { ...this.config, paramsSchema: schema },
@@ -51,7 +51,7 @@ export class RouteHandlerBuilder<
    * @param schema - The schema for the query
    * @returns A new instance of the RouteHandlerBuilder
    */
-  query<T extends Schema>(schema: T): RouteHandlerBuilder<TParams, T, TBody> {
+  query<T extends Schema>(schema: T): RouteHandlerBuilder<TParams, T, TBody, TContext> {
     return new RouteHandlerBuilder<TParams, T, TBody, TContext>({
       ...this,
       config: { ...this.config, querySchema: schema },
@@ -63,7 +63,7 @@ export class RouteHandlerBuilder<
    * @param schema - The schema for the body
    * @returns A new instance of the RouteHandlerBuilder
    */
-  body<T extends Schema>(schema: T): RouteHandlerBuilder<TParams, TQuery, T> {
+  body<T extends Schema>(schema: T): RouteHandlerBuilder<TParams, TQuery, T, TContext> {
     return new RouteHandlerBuilder<TParams, TQuery, T, TContext>({
       ...this,
       config: { ...this.config, bodySchema: schema },
