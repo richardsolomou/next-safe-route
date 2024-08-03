@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, expectTypeOf, it } from 'vitest';
 import { z } from 'zod';
 
 import { createSafeRoute } from '.';
@@ -240,6 +240,8 @@ describe('combined validation', () => {
         const { id } = context.params;
         const { user } = context.data;
 
+        expectTypeOf(user).toMatchTypeOf<{ id: string }>();
+
         return Response.json({ id, user }, { status: 200 });
       });
 
@@ -270,6 +272,9 @@ describe('combined validation', () => {
       .handler((request, context) => {
         const { id } = context.params;
         const { user, permissions } = context.data;
+
+        expectTypeOf(user).toMatchTypeOf<{ id: string }>();
+        expectTypeOf(permissions).toMatchTypeOf<string[]>();
 
         return Response.json({ id, user, permissions }, { status: 200 });
       });
