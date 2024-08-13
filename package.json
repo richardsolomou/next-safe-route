@@ -51,11 +51,8 @@
       "prettier --write"
     ]
   },
-  "dependencies": {
-    "@typeschema/main": "^0.13.9",
-    "@typeschema/zod": "^0.13.3"
-  },
   "devDependencies": {
+    "@sinclair/typebox": "^0.33.4",
     "@swc/core": "^1.5.29",
     "@tronite/style-guide": "^0.0.13",
     "@types/node": "^20.14.2",
@@ -67,7 +64,9 @@
     "release-it": "^17.3.0",
     "tsup": "^8.1.0",
     "typescript": "^5.4.5",
+    "valibot": "^0.37.0",
     "vitest": "^1.6.0",
+    "yup": "^1.4.0",
     "zod": "^3.23.8"
   },
   "packageManager": "pnpm@9.1.2",
