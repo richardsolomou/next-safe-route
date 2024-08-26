@@ -1,5 +1,5 @@
-import { Infer, Schema, validate } from '@typeschema/main';
-
+import { Infer, Schema, ValidationAdapter } from './adapters/types';
+import { zodAdapter } from './adapters/zod';
 import { HandlerFunction, HandlerServerErrorFn, OriginalRouteHandler, RouteHandlerBuilderConfig } from './types';
 
 type Middleware<T = Record<string, unknown>> = (request: Request) => Promise<T>;
@@ -8,6 +8,7 @@ interface RouteHandlerBuilderConstructorParams {
   config?: RouteHandlerBuilderConfig;
   middlewares?: Middleware[];
   handleServerError?: HandlerServerErrorFn;
+  validationAdapter?: ValidationAdapter;
 }
 
 export class RouteHandlerBuilder<
@@ -19,6 +20,7 @@ export class RouteHandlerBuilder<
   private config: RouteHandlerBuilderConfig;
   private middlewares: Middleware[];
   private handleServerError?: HandlerServerErrorFn;
+  private validationAdapter: ValidationAdapter;
 
   constructor({
     config = {
@@ -26,12 +28,14 @@ export class RouteHandlerBuilder<
       querySchema: undefined as unknown as TQuery,
       bodySchema: undefined as unknown as TBody,
     },
+    validationAdapter = zodAdapter(),
     middlewares = [],
     handleServerError,
   }: RouteHandlerBuilderConstructorParams = {}) {
     this.config = config;
     this.middlewares = middlewares;
     this.handleServerError = handleServerError;
+    this.validationAdapter = validationAdapter;
   }
 
   /**
@@ -39,7 +43,7 @@ export class RouteHandlerBuilder<
    * @param schema - The schema for the params
    * @returns A new instance of the RouteHandlerBuilder
    */
-  params<T extends Schema>(schema: T): RouteHandlerBuilder<T, TQuery, TBody> {
+  params<T extends Schema>(schema: T): RouteHandlerBuilder<T, TQuery, TBody, TContext> {
     return new RouteHandlerBuilder<T, TQuery, TBody, TContext>({
       ...this,
       config: { ...this.config, paramsSchema: schema },
@@ -51,7 +55,7 @@ export class RouteHandlerBuilder<
    * @param schema - The schema for the query
    * @returns A new instance of the RouteHandlerBuilder
    */
-  query<T extends Schema>(schema: T): RouteHandlerBuilder<TParams, T, TBody> {
+  query<T extends Schema>(schema: T): RouteHandlerBuilder<TParams, T, TBody, TContext> {
     return new RouteHandlerBuilder<TParams, T, TBody, TContext>({
       ...this,
       config: { ...this.config, querySchema: schema },
@@ -63,7 +67,7 @@ export class RouteHandlerBuilder<
    * @param schema - The schema for the body
    * @returns A new instance of the RouteHandlerBuilder
    */
-  body<T extends Schema>(schema: T): RouteHandlerBuilder<TParams, TQuery, T> {
+  body<T extends Schema>(schema: T): RouteHandlerBuilder<TParams, TQuery, T, TContext> {
     return new RouteHandlerBuilder<TParams, TQuery, T, TContext>({
       ...this,
       config: { ...this.config, bodySchema: schema },
@@ -99,7 +103,7 @@ export class RouteHandlerBuilder<
 
         // Validate the params against the provided schema
         if (this.config.paramsSchema) {
-          const paramsResult = await validate(this.config.paramsSchema, params);
+          const paramsResult = await this.validationAdapter.validate(this.config.paramsSchema, params);
           if (!paramsResult.success) {
             throw new Error(JSON.stringify({ message: 'Invalid params', errors: paramsResult.issues }));
           }
@@ -107,7 +111,7 @@ export class RouteHandlerBuilder<
 
         // Validate the query against the provided schema
         if (this.config.querySchema) {
-          const queryResult = await validate(this.config.querySchema, query);
+          const queryResult = await this.validationAdapter.validate(this.config.querySchema, query);
           if (!queryResult.success) {
             throw new Error(JSON.stringify({ message: 'Invalid query', errors: queryResult.issues }));
           }
@@ -115,7 +119,7 @@ export class RouteHandlerBuilder<
 
         // Validate the body against the provided schema
         if (this.config.bodySchema) {
-          const bodyResult = await validate(this.config.bodySchema, body);
+          const bodyResult = await this.validationAdapter.validate(this.config.bodySchema, body);
           if (!bodyResult.success) {
             throw new Error(JSON.stringify({ message: 'Invalid body', errors: bodyResult.issues }));
           }
