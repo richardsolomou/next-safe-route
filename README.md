@@ -6,7 +6,7 @@
   <a href="https://github.com/richardsolomou/next-safe-route/blob/main/LICENSE"><img src="https://img.shields.io/npm/l/next-safe-route?style=for-the-badge" /></a>
 </p>
 
-`next-zod-route` is a utility library for Next.js that provides type-safety and schema validation for [Route Handlers](https://nextjs.org/docs/app/building-your-application/routing/route-handlers)/API Routes.
+`next-safe-route` is a utility library for Next.js that provides type-safety and schema validation for [Route Handlers](https://nextjs.org/docs/app/building-your-application/routing/route-handlers)/API Routes.
 
 ## Features
 
