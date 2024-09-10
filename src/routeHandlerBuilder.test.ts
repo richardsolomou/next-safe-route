@@ -7,19 +7,31 @@ const paramsSchema = z.object({
   id: z.string().uuid(),
 });
 
+const paramsSchemaWithTransform = z.object({
+  id: z.string().transform((value) => Number(value)),
+});
+
 const querySchema = z.object({
   search: z.string().min(1),
+});
+
+const querySchemaWithTransform = z.object({
+  search: z.string().transform((value) => value.toUpperCase()),
 });
 
 const bodySchema = z.object({
   field: z.string(),
 });
 
+const bodySchemaWithTransform = z.object({
+  field: z.string().transform((value) => value.toUpperCase()),
+});
+
 describe('params validation', () => {
   it('should validate and handle valid params', async () => {
     const GET = createSafeRoute()
       .params(paramsSchema)
-      .handler((request, context) => {
+      .handler((_request, context) => {
         const { id } = context.params;
         return Response.json({ id }, { status: 200 });
       });
@@ -32,10 +44,26 @@ describe('params validation', () => {
     expect(data).toEqual({ id: '550e8400-e29b-41d4-a716-446655440000' });
   });
 
+  it('should validate and transform valid params', async () => {
+    const GET = createSafeRoute()
+      .params(paramsSchemaWithTransform)
+      .handler((_request, context) => {
+        const { id } = context.params;
+        return Response.json({ id }, { status: 200 });
+      });
+
+    const request = new Request('http://localhost/');
+    const response = await GET(request, { params: { id: '1' } });
+    const data = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(data).toEqual({ id: 1 });
+  });
+
   it('should return an error for invalid params', async () => {
     const GET = createSafeRoute()
       .params(paramsSchema)
-      .handler((request, context) => {
+      .handler((_request, context) => {
         const { id } = context.params;
         return Response.json({ id }, { status: 200 });
       });
@@ -53,7 +81,7 @@ describe('query validation', () => {
   it('should validate and handle valid query', async () => {
     const GET = createSafeRoute()
       .query(querySchema)
-      .handler((request, context) => {
+      .handler((_request, context) => {
         const search = context.query.search;
         return Response.json({ search }, { status: 200 });
       });
@@ -66,10 +94,26 @@ describe('query validation', () => {
     expect(data).toEqual({ search: 'test' });
   });
 
+  it('should validate and transform valid query', async () => {
+    const GET = createSafeRoute()
+      .query(querySchemaWithTransform)
+      .handler((_request, context) => {
+        const search = context.query.search;
+        return Response.json({ search }, { status: 200 });
+      });
+
+    const request = new Request('http://localhost/?search=test');
+    const response = await GET(request);
+    const data = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(data).toEqual({ search: 'TEST' });
+  });
+
   it('should return an error for invalid query', async () => {
     const GET = createSafeRoute()
       .query(querySchema)
-      .handler((request, context) => {
+      .handler((_request, context) => {
         const search = context.query.search;
         return Response.json({ search }, { status: 200 });
       });
@@ -87,7 +131,7 @@ describe('body validation', () => {
   it('should validate and handle valid body', async () => {
     const POST = createSafeRoute()
       .body(bodySchema)
-      .handler((request, context) => {
+      .handler((_request, context) => {
         const field = context.body.field;
         return Response.json({ field }, { status: 200 });
       });
@@ -103,10 +147,29 @@ describe('body validation', () => {
     expect(data).toEqual({ field: 'test-field' });
   });
 
+  it('should validate and transform valid body', async () => {
+    const POST = createSafeRoute()
+      .body(bodySchemaWithTransform)
+      .handler((_request, context) => {
+        const field = context.body.field;
+        return Response.json({ field }, { status: 200 });
+      });
+
+    const request = new Request('http://localhost/', {
+      method: 'POST',
+      body: JSON.stringify({ field: 'test-field' }),
+    });
+    const response = await POST(request);
+    const data = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(data).toEqual({ field: 'TEST-FIELD' });
+  });
+
   it('should return an error for invalid body', async () => {
     const POST = createSafeRoute()
       .body(bodySchema)
-      .handler((request, context) => {
+      .handler((_request, context) => {
         const field = context.body.field;
         return Response.json({ field }, { status: 200 });
       });
@@ -129,7 +192,7 @@ describe('combined validation', () => {
       .params(paramsSchema)
       .query(querySchema)
       .body(bodySchema)
-      .handler((request, context) => {
+      .handler((_request, context) => {
         const { id } = context.params;
         const { search } = context.query;
         const { field } = context.body;
@@ -158,7 +221,7 @@ describe('combined validation', () => {
       .params(paramsSchema)
       .query(querySchema)
       .body(bodySchema)
-      .handler((request, context) => {
+      .handler((_request, context) => {
         const { id } = context.params;
         const { search } = context.query;
         const { field } = context.body;
@@ -183,7 +246,7 @@ describe('combined validation', () => {
       .params(paramsSchema)
       .query(querySchema)
       .body(bodySchema)
-      .handler((request, context) => {
+      .handler((_request, context) => {
         const { id } = context.params;
         const { search } = context.query;
         const { field } = context.body;
@@ -208,7 +271,7 @@ describe('combined validation', () => {
       .params(paramsSchema)
       .query(querySchema)
       .body(bodySchema)
-      .handler((request, context) => {
+      .handler((_request, context) => {
         const { id } = context.params;
         const { search } = context.query;
         const { field } = context.body;
@@ -236,7 +299,7 @@ describe('combined validation', () => {
     const GET = createSafeRoute()
       .use(middleware)
       .params(paramsSchema)
-      .handler((request, context) => {
+      .handler((_request, context) => {
         const { id } = context.params;
         const { user } = context.data;
 
@@ -267,7 +330,7 @@ describe('combined validation', () => {
       .use(middleware1)
       .use(middleware2)
       .params(paramsSchema)
-      .handler((request, context) => {
+      .handler((_request, context) => {
         const { id } = context.params;
         const { user, permissions } = context.data;
 
