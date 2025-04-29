@@ -9,6 +9,7 @@ const paramsSchema = z.object({
 
 const querySchema = z.object({
   search: z.string().min(1),
+  status: z.string().array().optional(),
 });
 
 const bodySchema = z.object({
@@ -80,6 +81,23 @@ describe('query validation', () => {
 
     expect(response.status).toBe(400);
     expect(data.message).toBe('Invalid query');
+  });
+
+  it('should validate and handle valid query when query contains array', async () => {
+    const GET = createSafeRoute()
+      .query(querySchema)
+      .handler((request, context) => {
+        const search = context.query.search;
+        const status = context.query.status;
+        return Response.json({ search, status }, { status: 200 });
+      });
+
+    const request = new Request('http://localhost/?search=test&status=active&status=inactive');
+    const response = await GET(request);
+    const data = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(data).toEqual({ search: 'test', status: ['active', 'inactive'] });
   });
 });
 

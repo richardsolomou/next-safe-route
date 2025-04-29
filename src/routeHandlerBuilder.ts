@@ -103,7 +103,12 @@ export class RouteHandlerBuilder<
       try {
         const url = new URL(request.url);
         const params = context?.params || {};
-        const query = Object.fromEntries(url.searchParams.entries());
+        const query = Object.fromEntries(
+          Array.from(url.searchParams.keys()).map((key) => {
+            const values = url.searchParams.getAll(key);
+            return values.length === 1 ? [key, values[0]] : [key, values];
+          }),
+        );
         const body = request.method !== 'GET' ? await request.json() : {};
 
         // Validate the params against the provided schema
